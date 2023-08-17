@@ -1,4 +1,4 @@
-# did:knox Specification
+# `did:knox` Method Specification
 ## Introduction
 Identity is often proven today via either physical ownership of credentials (e.g., a driver’s license or passport) or online via a list of usernames and passwords on centralized services over the internet. These solutions lack privacy, with both methods exposing more data than is necessary to parties in a transaction. For example, age verification might require the showing of a driver’s license, which includes additional personal information like date of birth, address, and name. In reality, the only thing that must be proven is a verifiable way of knowing the answer to the binary question “Is this user over 21?”. While showing whole credentials may be acceptable to a person who may not remember, this exposure is not a best practice over the internet. With traditional identity systems, users store usernames and passwords on external centralized servers that are easy to forget and get reused in dozens of systems such that a single security breach exposes access to the rest of the victim’s associated systems.
 Knox aims to ensure sensitive data stays in the user’s secure storage, interacting (Ex authenticating, signing, verifying, etc) with cryptographic proofs of identity data instead of usernames/passwords along with manual PII via W3C Decentralized Identifiers (DID) and Verifiable Credentials (VC).  Knox in particular focuses on problems with current payment systems that leave consumers feeling they've lost control of their privacy, while still allowing financial compliance when required.  Some systems require PII to be sent to a server on every transaction, some require sharing of transaction data on public ledgers which can be analyzed and correlated to certain users.
@@ -18,7 +18,7 @@ The signature system support is `Ed25519Signature2020` by default but can be con
 ```
 ## Knox DID Document
 
-The basic structure of a DID document in Knox is as follows:
+The basic structure of a DID Document in Knox is as follows:
 ```json
 {
   "@context":[
@@ -79,11 +79,11 @@ This JSON object is a Decentralized Identifier (DID) Document, conforming to the
 For detailed information on the DID Document, you can refer to the W3C's DID Specification document.
 ## CRUD Operation
 ### Create/Register
-The Knox DID libraries enables the creation of Decentralized Identifiers (DIDs). The generated DID and associated DID Document are stored within the Knox application which allows for the verification of the integrity of the DID Document during data access or updates.
+The `did:knox` method supports the creation of Decentralized Identifiers (DIDs). The generated DID and associated DID Document are stored within the Knox application service via `create` API which allows for future cryptographic interaction with the DID subject.
 
 ### Read
-The Knox DID method supports two functionalities: resolver and dereferencer.
-- `resolve`: The resolver's resolve function permits holders to access their DID Documents held in the private data registry via their Knox DID. This function embodies the read operation on the decentralized identity infrastructure, aligning with the guidelines set forth in the W3C DID Specification. This ensures secure and standardized access to individual DID Documents, further cementing the decentralized nature of identity management facilitated by the Knox DID method.
+The `did:knox` method supports two functionalities: resolver and dereferencer.
+- `resolve`: The resolver's resolve function permits holders to access their DID Documents held in the verifiable data registry via their Knox DID. This function embodies the read operation on the decentralized identity infrastructure, aligning with the guidelines set forth in the W3C DID Specification. This ensures secure and standardized access to individual DID Documents, further cementing the decentralized nature of identity management facilitated by the Knox DID method.
 - `derefererence`: The dereference functionality provided by Knox allows for retrieval of specific property values from the Knox DID Document through a DID URL. For instance, a specific value such as the service endpoint from the service attribute within a holder's DID Document can be obtained.
 ### Dereference Example
 ```json
@@ -100,10 +100,17 @@ The Knox DID method supports two functionalities: resolver and dereferencer.
 }
 ```
 ### Update
-A holder can update their DID Document located in the personal data registry through the Knox application.
-### Delete
-A holder has the ability to delete their DID Document from the private data registry.
+A holder can update their DID Document located in the verifiable data registry through the Knox application service via `update` API.
+### Delete/Revoke
+A holder has the ability to delete their DID Document from the verifiable data registry through the Knox application service via `revoke` API.
 ## Privacy / Security Consideration
+The wallet service using the `did:knox` method should implement industry best practices for security such as storing private data and keys inside the wallet enclave, network transport security (ex TLS v1.3, mTLS, etc), not logging sensitive data, data leaving the wallet only when required, and ensuring the data does not get exposed to other local apps in the case mobile/device apps. 
+
+The DID Document should not have any PII and the DID service configured should be careful to not correlate the subject easily to certain accounts. To proactively avoid correlation and use of compromised keys, keys should be rotated periodically and the DID Document `verificationMethod` can support additional new keys while old ones are removed.  
+
+Issuer DIDs should be check against the Trusted Issuer Registry, and VCs revocation status should be check via `CredentialStatusList`, provided with `did:knox` registry.  
+
+For additional privacy compliance such as GDPR, DID Documents can be deleted from the registry to comply with requirements such as "Right To Erasure".
 
 ## Reference
 [Decentralized Identifier Resolution (DID Resolution) v0.3](https://www.w3.org/TR/did-core/)<br>
