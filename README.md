@@ -102,7 +102,7 @@ The Knox DID method supports two functionalities: resolver and dereferencer.
 ### Update
 A holder can update their DID Document located in the personal data registry through the Knox application.
 ### Delete
-
+A holder has the ability to delete their DID Document from the private data registry.
 ## Privacy / Security Consideration
 
 ## Reference
