@@ -1,14 +1,15 @@
-# Knox DID Specification
-Knox-did-specification which is conforming W3C-DID-Specification
-## Motivation
+# did:knox Specification
+## Introduction
+Identity is often proven today via either physical ownership of credentials (e.g., a driver’s license or passport) or online via a list of usernames and passwords on centralized services over the internet. These solutions lack privacy, with both methods exposing more data than is necessary to parties in a transaction. For example, age verification might require the showing of a driver’s license, which includes additional personal information like date of birth, address, and name. In reality, the only thing that must be proven is a verifiable way of knowing the answer to the binary question “Is this user over 21?”. While showing whole credentials may be acceptable to a person who may not remember, this exposure is not a best practice over the internet. With traditional identity systems, users store usernames and passwords on external centralized servers that are easy to forget and get reused in dozens of systems such that a single security breach exposes access to the rest of the victim’s associated systems.
+Knox aims to ensure sensitive data stays in the user’s secure storage, interacting (Ex authenticating, signing, verifying, etc) with cryptographic proofs of identity data instead of usernames/passwords along with manual PII via W3C Decentralized Identifiers (DID) and Verifiable Credentials (VC).  Knox in particular focuses on problems with current payment systems that leave consumers feeling they've lost control of their privacy, while still allowing financial compliance when required.  Some systems require PII to be sent to a server on every transaction, some require sharing of transaction data on public ledgers which can be analyzed and correlated to certain users.
 
-
-
-## Goal
+## Design Goals
+In order to increase adoption and bring traditional identity systems to this Self Sovereign Identity (SSI) model that leverages W3C DIDs and VCs, Knox attempts to achieve this bridging with currently familar industry standards operated at large enterprises such as financial institutions/banks. Knox will layer on top of existing identity systems and data sources to migrate the data in to DID/VCs in user wallets, which then can be used for transactions. Minimal data should be sent only when required for financial compliance (ex AML/CFT), and such logic can be implemented in wallets depending on the transaction type.  As institutions adopt digital assets/currency platforms which are Public Key Infrastructure(PKI) based, DIDs become the natural solution to enable the optimal balance of privacy and compliance, and Knox uses public keys as part of the DID for simpler translation.  As scalability and cost are blockers to adoption, the did:knox registry avoids being locked to a blockchain, avoiding expensive consensus algorithms and is designed to be hosted by a trusted operator- ex Bank consortium.  While blockchains make sense in De-Fi, in regulated assets/money there is less decentralization required when it comes to DID Registry responsibilities transacting through trusted institutions.  The `did:knox` method is somewhat similar to a combination of `did:key` and `did:web` except that instead of relying on HTTP servers for storage, it can rely on distributed database technologies design for higher scale and reliability.
 
 ## Knox DID Identifier Syntax
-- **DID Method Name**: Knox<br>
-
+- **DID Method Name**: knox<br>
+Additional institutional identifiers can be considered if required to be on separate registries- Ex `did:knox:institutionAId`
+The signature system support is `Ed25519Signature2020` by default but can be configured to use other systems. Ex `Secp256k1` based.
 
 ## Example
 
